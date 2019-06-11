@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { SearchMovie } from "../../../utils/services/search/searchs";
+import { SearchMovie } from "../../../services/search/searchs";
+import "./searchbar.css";
 
 export default function SearchBar(props) {
-  //let values = ["nada", "nadadenada", "nariz"];
   const [query, setQuery] = useState("");
   const [values, setValues] = useState([]);
 
   useEffect(() => {
+    if (query.length < 2) return;
     const fetchData = async () => {
       const result = await SearchMovie(query);
-      setValues(result.data.results);
+      let options = result.data.results
+        .sort((a, b) => a.vote_average - b.vote_average)
+        .reverse()
+        .slice(0, 5);
+
+      setValues(options);
     };
     fetchData();
   }, [query]);
-
-  //console.log(SearchMovie);
 
   return (
     <div className="navbar-item">
