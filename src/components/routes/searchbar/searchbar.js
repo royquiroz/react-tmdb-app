@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { SearchMovie } from "../../../services/search/searchs";
-import "./searchbar.css";
+import { SearchMovie } from "../../../services/search/movies";
 
 export default function SearchBar(props) {
   const [query, setQuery] = useState("");
@@ -10,9 +9,10 @@ export default function SearchBar(props) {
     if (query.length < 2) return;
     const fetchData = async () => {
       const result = await SearchMovie(query);
-      let options = result.data.results
-        .sort((a, b) => a.vote_average - b.vote_average)
-        .reverse()
+      let options = JSON.parse(JSON.stringify(result));
+
+      options = options.data.results
+        .sort((a, b) => b.vote_average - a.vote_average)
         .slice(0, 5);
 
       setValues(options);
@@ -32,7 +32,9 @@ export default function SearchBar(props) {
       />
       <datalist id="values">
         {values.map((e, i) => (
-          <option key={i}>{e.title}</option>
+          <option key={i}>
+            {e.title.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}
+          </option>
         ))}
       </datalist>
     </div>

@@ -6,11 +6,11 @@ const tabs = [
   {
     name: "Peliculas",
     route: "/movie"
-  },
+  } /*,
   {
     name: "Series",
     route: "/tv"
-  }
+  }*/
 ];
 
 export default function Navbar() {
